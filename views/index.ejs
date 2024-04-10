@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyCast - Home</title>
+    <link rel="stylesheet" href="../src/output.cssRefused to apply style from 'http://localhost:3000/src/output.css' because its MIME type ('text/html') is not a supported stylesheet MIME type, and strict MIME checking is enabled.">
+</head>
+<body>
+
+    <div class="flex">
+
+        <div class="left bg-[rgb(219 219 219)] w-[25%] h-screen flex flex-col items-center min-h-[740px] justify-center gap-y-[20px]">
+            <div>
+                <div class="city-name text-[40px]"> <%=cityName%> </div>
+                <div class="flex justify-start w-full">
+                    <div class="date"> <%=currentDate%> </div>
+                </div>
+            </div>
+            <div class="flex flex-col justify-center items-center gap-y-[10px]">
+                <div class="day"><%=currentDay%>, <%=currentTime%></div>
+                <div class="icon w-[80px] h-[80px] bg-yellow-200 rounded-[50%]"></div>
+                <div class="weather-description"><%=weatherDescription%></div>
+
+                <div>
+                    <div class="flex text-orange-300 gap-x-[8px]">
+                        <div class="sign flex items-center text-[30px] font-[35px] "><%=tempSign%></div>
+                        <div class="temperature text-[80px] font-[45px] "><%=currentTemp%></div>
+                        <div class="unit text-[30px] font-[35px] mt-[20px]">°<%=tempUnit%></div>
+                    </div>
+                    <div class="feels-like text-center">Feels like <%=tempSign%><%=currentTemp%>°<%=tempUnit%></div>
+                </div>
+            </div>
+
+            <div class="w-full flex flex-col items-center justify-center">
+
+                <!-- <div class="flex items-center justify-between px-[20px] text-[15px] w-full ">
+                    <div class="min-temp">Min: 29°C</div>
+                    <div class="max-temp">Max: 34°C</div>
+                </div> -->
+            </div>
+
+            <div class="flex w-full justify-center gap-x-[50px] py-[25px]">
+                
+                <ul class="flex flex-col gap-y-[20px] ">
+                    <li>Visibility:</li>
+                    <li>Wind speed:</li>
+                    <li>Humidity:</li>
+                    <li>Air Quality:</li>
+                    <li>Pressure:</li>
+                </ul>
+
+                <ul class="flex flex-col gap-y-[20px] ">
+                    <li class="flex justify-start gap-x-[5px] items-center">
+                        <span class="block w-[10px] h-[10px] rounded-[50%] bg-blue-600"></span>
+                        <span><%=visibility%> meter</span>
+                    </li>
+                    <li class="flex justify-start gap-x-[5px] items-center">
+                        <span class="block w-[10px] h-[10px] rounded-[50%] bg-green-800"></span>
+                        <span><%=windSpeed%> <%=windSpeedUnit%> </span>
+                    </li>
+                    <li class="flex justify-start gap-x-[5px] items-center">
+                        <span class="block w-[10px] h-[10px] rounded-[50%] bg-green-600"></span>
+                        <span> <%=humidity%> </span>
+                    </li>
+                    <li class="flex justify-start gap-x-[5px] items-center">
+                        <span class="block w-[10px] h-[10px] rounded-[50%] bg-green-300"></span>
+                        <span> <%=aqi%> AQI </span>
+                    </li>
+                    <li class="flex justify-start gap-x-[5px] items-center">
+                        <span class="block w-[10px] h-[10px] rounded-[50%] bg-green-200"></span>
+                        <span> <%=pressure%> mb </span>
+                    </li>
+
+                </ul>
+
+                
+            
+            </div>
+        </div>
+        
+        <div class="right bg-blue-300 w-[75%] h-screen"></div>
+        
+    </div>
+    <!-- <script src="../scripts/index.js"></script> -->
+</body>
+</html>

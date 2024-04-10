@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyCast - Home</title>
+    <link rel="stylesheet" href="../src/output.css">
+    <link rel="stylesheet" href="../src/style.css">
+</head>
+<body>
+    <div id="screen-box" class=" flex text-white justify-center overflow-hidden bg-gradient-to-b bg-[#54aed8]">
+        <!-- <video id="bg-video" src="../assets/videos/03d.mp4" autoplay muted loop></video> -->
+        <!-- <div class="clouds w-full h-full absolute overflow-hidden ">
+            <img class="absolute top-[60px] w-[312px] " style="--speed:4;" src="../assets/images/clouds/1.png" alt="">
+        </div> -->
+        <div id="loading-window" class=" w-screen h-screen  absolute tile rounded-[0px] flex flex-col justify-center items-center gap-y-8 z-[1000] hidden">
+            <img class="invert" src="../assets/icons/loading.png" alt="">
+            <p>Loading...</p>
+        </div>
+
+        <div class="weather w-screen h-screen absolute">
+            <div class="stars w-screen h-[35%] absolute overflow-hidden"></div>
+            <div class="snow w-screen h-screen absolute overflow-hidden"></div>
+            <div class="rain w-screen h-screen absolute overflow-hidden"></div>
+            <div class="mist w-screen h-screen absolute overflow-hidden z-100">
+                <!-- <div class="w-full h-full bg-[#787878c4]"></div> -->
+            </div>
+            <div class="clouds w-screen h-screen absolute overflow-hidden">
+                <!-- <div class="cloud top-[-200px] left-[200px] w-[900px] h-[300px] ">
+                    <div class="cloud-layer" id="cloud-back"></div>
+                    <div class="cloud-layer" id="cloud-mid"></div>
+                    <div class="cloud-layer" id="cloud-front"></div>
+                </div> -->
+
+            </div>
+
+            <!-- svg required for coluds -->
+            <svg width="0" height="0">
+                <!--Top Layer-->
+                <filter id="filter-back">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="0" />
+                    <feDisplacementMap in="SourceGraphic" scale="170" />
+                </filter>
+        
+                <filter id="filter-mid">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="0" />
+                    <feDisplacementMap in="SourceGraphic" scale="150" />
+                </filter>
+        
+                <filter id="filter-front">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="0" />
+                    <feDisplacementMap in="SourceGraphic" scale="100" />
+                </filter>
+            </svg>
+
+            
+        </div>
+
+        <div class="left tile w-[25%] h-screen max-h-screen flex flex-col items-center min-h-[740px] justify-center gap-y-[20px] relative transition-all duration-700 ease-in-out delay-0 right-[0%] z-10">
+
+            <div class="w-full flex flex-col items-center justify-center fixed top-0 mt-[20px] z-10">
+                <!-- <img class="absolute left-[35px]" src="../assets/icons/search-icon.svg" alt=""> -->
+                <!-- actual search box -->
+                <div class="flex justify-center items-center w-full gap-4 px-10">
+                    <input id="searchCityInput" type="text" placeholder="Search" class="w-[100%] tile px-[10px] py-[7px] transition-all ease-in-out duration-200 " >
+                    <!-- toggle left section button -->
+                    <div id="left-toggle" class="w-[30px] h-[30px] z-10 flex justify-center items-start cursor-pointer hover:scale-125 transition-all ease-in-out duration-300 hidden"
+                        onclick="toggleLeftMenu()">
+                        <img class="w-full" src="../assets/icons/back-arrow-icon.svg" alt="">
+                    </div>
+                </div>
+
+                <ul id="search-cities" class="search-results w-[85%] flex flex-col bg-gray-700 rounded-[10px] transition-all ease-in-out duration-300  ">
+                    <!-- <li class=" bg-blue-440  cursor-pointer hover:bg-blue-400" onclick="searchCurrentCity(event)">
+                        <div class=" p-[10px]">Name
+                            <div class="hidden">lat</div>
+                            <div class="hidden">lon</div>
+                        </div>
+                    </li> -->
+                </ul>
+            </div>
+
+            <!-- cities -->
+            <div class="w-full h-full mt-[75px] overflow-scroll ">
+                <ul id="saved-cities" class="px-[13px] overflow-scroll ">
+                    
+                    <li class="relative hover:scale-[102%] transition-all duration-100 ease-linear"  onclick="updateCityFromSavedCities(this) " onmouseenter="savedCitiesMouseEvent(this)" onmouseleave="savedCitiesMouseEvent(this)">
+                        <div class="flex justify-between items-center py-[7px] px-[15px] w-full h-full cursor-pointer">
+                            <div class="hidden">
+                                <div>lat</div>
+                                <div>lon</div>
+                            </div>
+                            <div >
+                                <div class="text-[20px]">demo Pune</div>
+                                <div class="text-[13px]">12:43</div>
+                                <div class="text-[13px]">Clear</div>
+                            </div>
+                            <div class="text-[40px] ">18°</div>
+                        </div>
+                        <div class="cross w-[15px] h-[15px] bg-transparent backdrop-blur-sm filter invert rounded-[10px] absolute top-[calc(50%-5px)] right-[-5px] hidden" onclick="savedCitiesCrossButtonClicked(this)">
+                            <img src="../assets/icons/cross-icon.png" alt="" >
+                        </div>
+                    </li>
+                    <div class="break-line bg-[rgb(145,154,166)] h-[1px] w-full"></div>
+
+
+                    <li class="relative hover:scale-[101%] transition-all duration-100 ease-linear onclick="updateCityFromSavedCities(this) " onmouseenter="savedCitiesMouseEvent(this)" onmouseleave="savedCitiesMouseEvent(this)"">
+                        <div class="flex justify-between items-center py-[7px] px-[15px] w-full h-full cursor-pointer" >
+                            <div class="hidden">
+                                <div>${c}</div>
+                                <div>${cur}</div>
+                            </div>
+                            <div>
+                                <div class="text-[20px]">${city[2]}</div>
+                                <div>${}</div>
+                                <div class="text-[13px]">${c.main}</div>
+                            </div>
+                            <div class="text-[40px]">34°</div>
+                        </div>
+                        <div class="cross w-[15px] h-[15px] bg-transparent backdrop-blur-sm filter invert rounded-[10px] absolute top-[calc(50%-5px)] right-[-5px] hidden" onclick="savedCitiesCrossButtonClicked(this)">
+                            <img src="../assets/icons/cross-icon.png" alt="" >
+                        </div>
+                    </li>
+                    <div class="break-line bg-[rgb(145,154,166)] h-[1px] w-full"></div>
+
+
+                    <li class="flex justify-between items-center py-[7px] px-[15px]">
+                        <div class="hidden">
+                            <div>lat</div>
+                            <div>lon</div>
+                        </div>
+                        <div>
+                            <div class="text-[20px]">demo Mumbai</div>
+                            <div>10:59</div>
+                        </div>
+                            <div class="text-[40px] ">34°</div>
+                    </li>
+                    <div class="break-line bg-[rgb(145,154,166)] h-[1px] w-full"></div>
+
+                    
+                </ul>
+            </div>
+        </div>
+
+        <!-- right section -->
+        <div class="right w-[75%] relative transition-all duration-700 ease-in-out delay-0 flex justify-center ">
+            
+            <!-- right main -->
+            <div class="w-[80%] overflow-y-scroll overflow-x-hidden  transition-all duration-700 ease-in-out relative items-center flex flex-col max-w-[863px] min-w-[863px]">
+
+                <!-- toggle left section button -->
+                <div id="right-toggle" class="w-[25px] h-[25px] absolute top-[10px] left-[30px]  flex justify-center items-start cursor-pointer hover:scale-125 transition-all ease-in-out duration-300 "
+                    onclick="toggleLeftMenu()">
+                    <img class="w-full" src="../assets/icons/menu-icon.svg" alt="">
+                </div>
+
+                <!-- button to save current city -->
+                <div id="save-city-button" class="w-[110px] h-[25px] absolute top-[10px] right-[0px] flex justify-center items-center flex justify-center items-start cursor-pointer transition-all ease-in-out duration-300"
+                    onclick="saveCurrentCity()">
+                    <img class="w-[25px] h-[25px] hover:scale-125 transition-all ease-in-out duration-300" src="../assets/icons/bookmark-add-icon.svg" alt="" onmouseenter="toggleBookmarkText(event)"
+                    onmouseleave="toggleBookmarkText(event)">
+                    <div class="tile absolute text-[0px] top-[110%] text-center transition-all ease-in-out duration-300 " > Add Bookmark </div>
+                </div>
+
+                <!-- main info -->
+                <div id="main-info" class="flex flex-col py-[60px] sticky top-0 ">
+                    <div id="cityName" class="text-center">PUNE</div>
+                    <div id="current-date" class="text-center font-[20px]">Monday, Mar 22</div>
+                    <div class="flex justify-center gap-x-[6px] mt-[-20px]">
+                        <div id="tempSign" class=" flex items-center text-[40px]">+</div>
+                        <div id="currTemp" class=" text-[120px] ">32</div>
+                        <div id="tempUnit" class=" text-[40px] mt-[30px]">°C</div>
+                    </div>
+                    <div class="flex justify-center items-center gap-x-2 mt-[-20px]">
+                        <img id="main-weather-icon" src="../assets/icons/sunny-weather-icon.svg" alt="weather-icon" class="w-[37px]">
+                        <div id="currWeather" class="text-center">Sunny</div>
+                    </div>
+                    <div id="main-time" class="text-center text-[35px]">12:34</div>
+                    
+                </div>
+
+                <!-- tiles -->
+                <div id="tiles" class="grid grid-cols-4 gap-y-[14px] gap-x-[10px]  justify-items-center items-center transition-all duration-700 ease-in-out ">
+
+                    <!-- temperature graph -->
+                    <div id="temp-graph-tile" class="tile w-full col-span-4 row-span-2 overflow-scroll">
+                        <div class="flex justify-center items-center text-[13px] font-bold py-1">Temperature °C</div>
+                        <div class="  overflow-x-scroll mt-[-20px]">
+                            <div class="w-[4000px] h-[250px]"><canvas id="tempGraph"></canvas></div>
+                        </div>
+                    </div>
+                    
+
+                    <!-- humidity tile -->
+                    <div id="humidity-tile" class="tile w-[200px] h-[200px] flex flex-col items-start justify-between py-[10px] hover:scale-[1.01] ease-in-out duration-200">
+                        <div>
+                            <div class="flex w-full justify-start gap-x-[4px] px-[10px]">
+                                <img class="w-[20px]" src="../assets/icons/humidity-icon.svg" alt="">
+                                <div>HUMIDITY</div>
+                            </div>
+                            <div id="humidity-reading" class="text-[40px] p-[10px]">34%</div>
+                            <div class="text-[12px] px-[10px]">
+                                <div id="rain-reading">Rain: 0.23mm in last 1hr</div>
+                                <div id="snow-reading">Snow: 0.23mm in last 1hr</div>
+                            </div>
+                        </div>
+                        <div id="humidity-message" class="text-[13px] px-[10px] ">Moisture content: Low</div>
+                    </div>
+
+                    <!-- aqi tile -->
+                    <div id="aqi-tile" class="tile w-[640px] h-[200px] flex items-start justify-between col-span-3 hover:scale-[1.01] ease-in-out duration-200">
+                        <!-- 1st section -->
+                        <div class=" w-1/3 h-full flex flex-col justify-between py-[10px] ">
+                            <div>
+                                <div class="flex w-full justify-start gap-x-[4px] px-[10px]">
+                                    <img class="w-[20px]" src="../assets/icons/aqi-icon.svg" alt="">
+                                    <div>AIR QUALITY</div>
+                                </div>
+                                <div id="aqi-reading" class="text-5xl p-[10px]">157</div>
+                                <!-- <div class="text-[12px] px-[10px]">
+                                    <div>Modrately polluted</div>
+                                </div> -->
+                            </div>
+                            <div id="aqi-message" class="text-[13px] px-[10px] ">Wear masks while going outside</div>
+                        </div>
+
+                        <!-- 2nd section -->
+                        <div class="w-2/3  h-full">
+                            <!-- polluting components -->
+                            <div class="h-[75%] flex justify-center items-center">
+                                <!-- contents 1 -->
+                                <div id="aqi-contents-1" class=" w-1/2 h-full flex flex-col justify-evenly items-center">
+                                </div>
+                                <!-- contents 2 -->
+                                <div id="aqi-contents-2" class="w-1/2 h-full flex flex-col justify-evenly items-center">
+                                    
+                                </div>
+                            </div>
+                            <div class="break-line bg-[rgb(145,154,166)] h-[1px] w-full"></div>
+
+                            <!-- graphical representation -->
+                            <div class=" w-full h-[25%] flex justify-center items-center ">
+                                <div class="bg-gradient-to-r from-green-600 via-yellow-400 to-red-700 w-full mr-[20px] h-[8px] rounded-[20px] relative">
+                                    <div id="aqi-ring" class="w-[16px] h-[16px] rounded-[50%] bg-white backdrop-blur-[10px] absolute top-[-3px] border-black border-2 transition-all ease-in-out duration-300 left-[0%]"> </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- weather forcast tile -->
+                    <div id="weather-forecast-tile" class="tile w-[420px] h-full flex flex-col items-start col-span-2 row-span-2 hover:scale-[1.01] ease-in-out duration-200">
+
+                        <div class="p-[10px] flex justify-start items-center gap-x-[10px]">
+                            <img class="w-[17px]" src="../assets/icons/calender-icon.svg" alt="">
+                            <div class="text-[15px]">WEATHER FORCAST</div>
+                        </div>
+                        <div class="break-line bg-[rgb(145,154,166)] h-[1px] w-full"></div>
+
+                        <div class="flex justify-evenly items-center w-full">
+
+                            <ul id="forecast-ul" class="flex flex-col gap-y-[0px] w-full ">
+
+                                <li class="flex gap-x-[10px] items-center justify-between px-[20px] py-[8px] ">
+                                    <div class="text-left w-[60px]">Today</div>
+                                    <div class="flex items-center justify-center gap-x-[35px]">
+                                        <div class="flex flex-col justify-center items-center">
+                                            <img class="w-[20px]" src="../assets/icons/sunny-weather-icon.svg" alt="">
+                                            <div class="text-[10px]">50%</div>
+                                        </div>
+                                        <div class="w-[30px] ">34</div>
+                                        <div
+                                            class="bg-gradient-to-r from-yellow-200 to-orange-600 w-[120px] h-[8px] rounded-[10px] relative">
+                                            <div style="left: 50%;"
+                                                class="w-[16px] h-[16px] rounded-[50%] bg-white backdrop-blur-[10px] absolute top-[-4px] border-black border-2"
+                                                onmouseenter="toggleWeatherForcastRing(event)"
+                                                onmouseleave="toggleWeatherForcastRing(event)">
+                                                <div id="weather-forcast-ring"
+                                                    class="tile absolute w-[0px] text-[0px] top-[100%] left-[0%] text-center  transition-all ease-in-out duration-300">
+                                                    Feels like 20°
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="w-[30px] ">45</div>
+                                    </div>
+                                </li>
+                                <div class="w-full flex justify-center items-center">
+                                    <div class="break-line bg-[rgb(145,154,166)] h-[1px] w-[95%]"></div>
+                                </div>
+
+                                <li class="flex gap-x-[10px] items-center justify-between px-[20px] py-[8px] ">
+                                    <div class="text-left w-[60px]">Today</div>
+                                    <div class="flex items-center justify-center gap-x-[35px]">
+                                        <div class="flex flex-col justify-center items-center">
+                                            <img class="w-[20px]" src="../assets/icons/sunny-weather-icon.svg" alt="">
+                                            <div class="text-[10px]">50%</div>
+                                        </div>
+                                        <div class="w-[30px] ">34</div>
+                                        <div
+                                            class="bg-gradient-to-r from-yellow-200 to-orange-600 w-[120px] h-[8px] rounded-[10px] relative">
+                                            <div style="left: 50%;"
+                                                class="w-[16px] h-[16px] rounded-[50%] bg-white backdrop-blur-[10px] absolute top-[-4px] border-black border-2"
+                                                onmouseenter="toggleWeatherForcastRing(event)"
+                                                onmouseleave="toggleWeatherForcastRing(event)">
+                                                <div id="weather-forcast-ring"
+                                                    class="tile absolute w-[0px] text-[0px] top-[100%] left-[0%] text-center  transition-all ease-in-out duration-300">
+                                                    Feels like 20°</div>
+                                            </div>
+                                        </div>
+                                        <div class="w-[30px] ">45</div>
+                                    </div>
+                                </li>
+                                <div class="break-line bg-[rgb(145,154,166)] h-[1px] w-full"></div>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- visibility -->
+                    <div id="visibility-tile" class="tile w-[200px] h-[200px] flex flex-col items-start justify-between py-[10px] hover:scale-[1.01] ease-in-out duration-200">
+                        <div>
+                            <div class="flex w-full justify-start gap-x-[6px] px-[10px]">
+                                <img class="w-[20px]" src="../assets/icons/visibility-icon.svg" alt="">
+                                <div>VISIBILITY</div>
+                            </div>
+                            <div id="visibility-reading" class="text-[40px] p-[10px]">13 km</div>
+                        </div>
+                        <div id="visibility-message" class="text-[13px] px-[10px] ">Visibility Status: Demo</div>
+                    </div>
+
+                    <!-- feels like -->
+                    <div id="feels-like-tile" class="tile w-[200px] h-[200px] flex flex-col items-start justify-between py-[10px] hover:scale-[1.01] ease-in-out duration-200">
+                        <div>
+                            <div class="flex w-full justify-start gap-x-[4px] px-[10px]">
+                                <img class="w-[20px]" src="../assets/icons/feels-like-temp-icon.svg" alt="">
+                                <div>FEELS LIKE</div>
+                            </div>
+                            <div id="feels-like-reading" class="text-[40px] p-[10px]">27°C</div>
+                            <div class="text-[12px] px-[10px]">
+                                <div id="feels-like-min-reading">Temp min 12°</div>
+                                <div id="feels-like-max-reading">Temp max 32°</div>
+                            </div>
+                        </div>
+                        <div id="feels-like-message" class="text-[13px] px-[10px] pt-4">Wind makes it feel colder</div>
+                    </div>
+
+                    <!-- wind -->
+                    <div id="wind-tile" class="tile w-[420px] h-[200px] flex py-[10px] col-span-2 hover:scale-[1.01] ease-in-out duration-200">
+
+                        <div class="flex flex-col justify-between h-full w-1/2">
+                            <div>
+                                <div class="flex w-full justify-start gap-x-[6px] px-[10px]">
+                                    <img class="w-[20px]" src="../assets/icons/air-icon.svg" alt="">
+                                    <div>WIND</div>
+                                </div>
+                                <div id="wind-reading" class="text-[40px] p-[10px]">23 KMH</div>
+                                <div class="text-[12px] px-[10px]">
+                                    <div id="gusts">Gust: 3kmh</div>
+                                </div>
+                            </div>
+                            <div class="text-[13px] px-[10px] pt-9">Mild gusts</div>
+                        </div>
+
+                        <div class="w-1/2 h-full flex justify-center items-center ">
+                            <!-- <div class="border-white border-[10px] w-[140px] h-[140px] rounded-[50%]"></div> -->
+
+                            <div class="w-[100px] h-[100px] flex justify-center items-center relative">
+                                <div class="bg-white backdrop-blur-[10px] w-[4px] h-[10px] absolute left-[50%-4px] top-0 rotate-[0deg] rounded-[1px]">
+                                </div>
+                                <div class="bg-white backdrop-blur-[10px] w-[4px] h-[10px] absolute left-[50%-4px] bottom-0 rotate-[0deg] rounded-[1px]">
+                                </div>
+                                <div class="bg-white backdrop-blur-[10px] w-[4px] h-[10px] absolute left-0 top-[50%-4px] rotate-[90deg] rounded-[1px]">
+                                </div>
+                                <div class="bg-white backdrop-blur-[10px] w-[4px] h-[10px] absolute right-0 top-[50%-4px] rotate-[90deg] rounded-[1px]">
+                                </div>
+
+                                <div class="bg-white backdrop-blur-[10px] w-[2px] h-[6px] absolute left-[15%] top-[15%] rotate-[-45deg] rounded-[1px">
+                                </div>
+                                <div class="bg-white backdrop-blur-[10px] w-[2px] h-[6px] absolute right-[15%] top-[15%] rotate-[45deg] rounded-[1px">
+                                </div>
+                                <div class="bg-white backdrop-blur-[10px] w-[2px] h-[6px] absolute left-[15%] bottom-[15%] rotate-[45deg] rounded-[1px">
+                                </div>
+                                <div class="bg-white backdrop-blur-[10px] w-[2px] h-[6px] absolute right-[15%] bottom-[15%] rotate-[-45deg] rounded-[1px">
+                                </div>
+                            </div>
+
+                            <div class="absolute w-[160px] h-[160px]">
+                                <div class="absolute top-0 left-[76px] text-[12px]">N</div>
+                                <div class="absolute bottom-0 left-[76px] text-[12px]">S</div>
+                                <div class="absolute right-0 top-[70px] text-[12px]">E</div>
+                                <div class="absolute left-0 top-[70px] text-[12px]">W</div>
+
+                                <div class="absolute top-[23px] left-[130px] text-[12px]">NE</div>
+                                <div class="absolute top-[23px] right-[130px] text-[12px]">NW</div>
+                                <div class="absolute bottom-[23px] left-[130px] text-[12px]">SE</div>
+                                <div class="absolute bottom-[23px] right-[130px] text-[12px]">SW</div>
+                            </div>
+
+                            <div id='needle'
+                                class="absolute flex items-center justify-center transition-all duration-300 ease-in-out">
+                                <div class="absolute w-[45px] h-[3px] bg-white backdrop-blur-[10px] "></div>
+                                <div class="absolute bg-white backdrop-blur-[10px] w-2 h-2 rounded-[50%] left-[20px]"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- pressure tile -->
+                    <div id="pressure-tile" class="tile w-[200px] h-[200px] flex flex-col items-start justify-center py-[22px] hover:scale-[1.01] transition-all ease-in-out duration-200">
+
+                        <div class="flex w-full justify-start gap-x-[6px] px-[10px]">
+                            <img class="w-[17px]" src="../assets/icons/pressure-icon.svg" alt="">
+                            <div>PRESSURE</div>
+                        </div>
+
+                        <div class="w-full h-full flex justify-center flex-col items-center ">
+                            <img class="w-[150px] mt-[-10px]" src="../assets/icons/barometer.svg" alt="">
+                            <div class="text-[12px] mt-[-15px] flex justify-center items-center gap-x-[50px]">
+                                <div>Low</div>
+                                <div>High</div>
+                            </div>
+                            <div id="pressure-bar" class="bg-white backdrop-blur-[10px] w-[4px] h-[50px] absolute transition-all ease-in-out duration-300">
+                                <div class="w-[7px] h-[7px] rounded-[50%] absolute top-[-1px] right-[-1.5px] bg-white backdrop-blur-[10px]"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- sun cycle tile -->
+                    <div id="sun-cycle-tile" class="tile w-[200px] h-[200px] flex flex-col items-start justify-between py-[10px] hover:scale-[1.01] ease-in-out duration-200">
+                        <div class="flex w-full justify-start gap-x-[4px] px-[10px]">
+                            <img class="w-[20px]" src="../assets/icons/sun-cycle-icon.svg" alt="">
+                            <div>SUN CYCLE</div>
+                        </div>
+
+                        <div class="text-[12px] px-[10px]">
+                            <div>Sunrise</div>
+                        </div>
+                        <div  id="sunrise" class="text-[40px] px-[10px]">06:10</div>
+
+                        <div class="text-[12px] px-[10px]">
+                            <div >Sunset</div>
+                        </div>
+                        <div id="sunset" class="text-[40px] px-[10px]">18:25</div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="../scripts/weather.js"></script>
+    <script src="../scripts/index.js"></script>
+</body>
+
+</html>
